@@ -1,44 +1,23 @@
-import functools, time
+import functools
+from utils.print_result import CompareTableResult, t
+
 
 @functools.cache
 def factorial(n):
-    return n * factorial(n-1) if n else 1
+    return n * factorial(n - 1) if n else 1
+
 
 def factorial_no_cache(n):
-    return n * factorial_no_cache(n-1) if n else 1
+    return n * factorial_no_cache(n - 1) if n else 1
+
 
 if __name__ == "__main__":
-    print("Starting cached function")
+    print("Starting...")
+    table = CompareTableResult(
+        "Cache Comparation", ["Factorial", " Cached (sec) ", " Not Cached (sec) "]
+    )
 
-    s1 = time.perf_counter()
-    factorial(100)
-    e1 = time.perf_counter()
-    print(f"factorial(100) took: {e1 - s1}")
-
-    s2 = time.perf_counter()
-    factorial(50)
-    e2 = time.perf_counter()
-    print(f"factorial(100) took: {e2 - s2}")
-
-    s3 = time.perf_counter()
-    factorial(125)
-    e3 = time.perf_counter()
-    print(f"factorial(100) took: {e3 - s3}")
-
-    # No cache version
-    print("Starting No cached function")
-
-    s1 = time.perf_counter()
-    factorial_no_cache(100)
-    e1 = time.perf_counter()
-    print(f"factorial_no_cache(100) took: {e1 - s1}")
-
-    s2 = time.perf_counter()
-    factorial_no_cache(50)
-    e2 = time.perf_counter()
-    print(f"factorial_no_cache(100) took: {e2 - s2}")
-
-    s3 = time.perf_counter()
-    factorial_no_cache(125)
-    e3 = time.perf_counter()
-    print(f"factorial_no_cache(100) took: {e3 - s3}")
+    table.addRow(["100", t(factorial, 100), t(factorial_no_cache, 100)])
+    table.addRow(["50", t(factorial, 50), t(factorial_no_cache, 50)])
+    table.addRow(["125", t(factorial, 125), t(factorial_no_cache, 125)])
+    print(table)
