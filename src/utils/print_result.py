@@ -10,7 +10,15 @@ def t(f, *args):
 
 
 class CompareTableResult:
-    """Class to compare result in a table format"""
+    """Class to compare results in a table format:\n
+    +-----------------------+\n
+    |   Table Comparison    |\n
+    +-----------------------+\n
+    | Column 01 | Column 02 |\n
+    | row1 col1 | row1 col2 |\n
+    | row2 col1 | row2 col2 |\n
+    +-----------------------+\n
+    """
 
     LEFT_RIGHT = "|"
     JUNCTION = "+"
@@ -25,6 +33,12 @@ class CompareTableResult:
         return self.draw_table()
 
     def addRow(self, row: list[str]):
+        expected = len(self.headers)
+        actual = len(row)
+        if expected != actual:
+            raise IndexError(
+                f"row and table size does not match.Expected row to have {expected} items. Found {actual}"
+            )
         self.table.append(row)
 
     def get_width(self) -> list[int]:
@@ -54,7 +68,7 @@ class CompareTableResult:
 
 
 if __name__ == "__main__":
-    x = CompareTableResult("sample", ["column 1", "column 2"])
-    x.addRow(["r1_c1", "r1_c2"])
-    x.addRow(["r2_c1", "r2_c2"])
+    x = CompareTableResult("Table Comparison", [" Column 01 ", " Column 02 "])
+    x.addRow(["row1 col1", "row1 col2"])
+    x.addRow(["row2 col1", "row2 col2"])
     print(x)
